@@ -1,0 +1,12 @@
+name: CHconsolidatechecker
+title: CHconsolidatechecker
+username:
+account: bolander
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4254032
+bundleId: 4713801
+url: https://bolander.shinyapps.io/CHconsolidatechecker/
+when: 1623661491.01857
+asMultiple: FALSE
+asStatic: FALSE
