@@ -85,7 +85,7 @@ server <- function(input, output, session) {
    })
 
 
-   # turn joined projected into datatable
+   # output current results
    output$dataset_current_dt <- renderDT({
       
       dataset <- dataset_reactive()
