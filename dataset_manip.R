@@ -1,10 +1,28 @@
-dataset_clean <- function(dataset){
 
-  c1 <- which(names(dataset) == 'SITUATION.COURANTE')
+count_ok_fun <- function(x){
+  if(x == 'ok'){ return(1)} #code stops here if TRUE
+  return(0)
+}
+
+dataset_clean <- function(dataset, sheet_type){
   
+  #column 8 is the start of the current phase information - selecting by column number because of english/french versions
+  
+  if(sheet_type == 'current'){
+    print("Selecting current Data")
+    c1 <-  8
+  }else if(sheet_type == 'projected'){
+    c1 <- 20
+    print("Selecting projected Data")
+  }
+
+  
+  #including the first 3 columns which contain geographic info, last 5 columns contain - remove any total field
   dataset_current <- 
     dataset[,c(1,2,3,c1:(c1+5))] %>% 
     as_tibble() 
+  
+  
 
   names(dataset_current) = c(
     'adm0_name',
@@ -17,6 +35,9 @@ dataset_clean <- function(dataset){
     'phase4perc', 
     'phase5perc'
   )
+  
+  #dont include any totals or info where the geo info is missing
+  dataset_current <- dataset_current %>% filter(!is.na(adm0_name))
   
   dataset_current <- dataset_current %>% 
     mutate(across(phase:phase5perc, as.numeric))
@@ -37,8 +58,14 @@ dataset_clean <- function(dataset){
     rule13 = if_else((phase == 2 & phase3perc > 0.5)| (phase == 2 & phase4perc > 0), "phase == 2 & phase3perc > 0.5)| (phase == 2 & phase4perc > 0) - Check population in phase 3 and above", "ok"),
     rule14 = if_else((phase == 1 & phase3perc > 0) | (phase == 1 & phase4perc > 0), "phase == 1 & phase3perc > 0)| (phase == 1 & phase4perc > 0) - Check population in phase 3 and above", "ok"))
   
-  #figure out a smarter way of doing this with filter across 
-  dataset_current <- dataset_current %>% filter(rule1 != "ok" | rule2 != "ok" | rule3 != "ok"| rule4 != "ok"| rule5 != "ok"| rule6 != "ok"| rule7 != "ok" | rule8 != "ok" | rule9 != "ok" | rule10 != "ok" | rule11 != "ok" | rule12 != "ok" | rule13 != "ok" | rule14 != "ok")
+  #filter out only observations that have an error
+  
+  dataset_current <- dataset_current %>%
+    rowwise() %>% #for each row
+    mutate(count_ok = sum(across(rule1:rule14,count_ok_fun))) %>% 
+    filter(count_ok < 14) %>% 
+    select(-count_ok)
   
   return(dataset_current)
 }
+

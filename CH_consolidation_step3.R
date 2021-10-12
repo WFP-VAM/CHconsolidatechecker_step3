@@ -20,7 +20,7 @@ ui <- fluidPage(
    tabsetPanel(
       tabPanel("Import data",
                hr(),
-               p(em("Input the Tableaur Results file containg - Table 4 Estimation Pop")),
+               p(em("Will search for and load sheet name 'Tableau 4 - Estimation Pop from selected excel sheet")),
                fileInput('file', 'Input'),
                bsAlert('alert1'),
                uiOutput('select_sheet'),
@@ -33,13 +33,10 @@ ui <- fluidPage(
       ),
       #show output of the current join
       tabPanel("Projected Results",
-               hr(),
-               p(em("Rows below contain errors/warnings/suggestions according to rules")),
-               DTOutput('dataset_projected_dt')
+               h1("Projected Results")
       )
    )
 )
-
 
 
 server <- function(input, output, session) {
@@ -88,11 +85,11 @@ server <- function(input, output, session) {
    })
 
 
-   # output current results
+   # turn joined projected into datatable
    output$dataset_current_dt <- renderDT({
       
       dataset <- dataset_reactive()
-      dataset_current <- dataset_clean(dataset, sheet_type = 'current')
+      dataset_current <- dataset_clean(dataset)
       
       datatable(dataset_current, filter = "top",
                            extensions = 'Buttons',
@@ -102,28 +99,8 @@ server <- function(input, output, session) {
                                                buttons = c('copy', 'csv')
                                              )
                )
-      # output projected results   
-      
-      
       })
    
-   output$dataset_projected_dt <- renderDT({
-      
-      dataset <- dataset_reactive()
-      dataset_current <- dataset_clean(dataset, sheet_type = 'projected')
-      
-      datatable(dataset_current, filter = "top",
-                extensions = 'Buttons',
-                options = list( # pageLength = ALL, info = FALSE,
-                   lengthMenu = list(c(15, -1), c("15", "All")),
-                   dom = 'lBfrtip',
-                   buttons = c('copy', 'csv')
-                )
-      )
-      # output projected results   
-      
-      
-   })
    
    
    
