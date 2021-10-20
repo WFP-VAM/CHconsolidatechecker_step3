@@ -55,15 +55,14 @@ dataset_clean <- function(dataset, sheet_type){
     rule10 = if_else(phase == 2 & (phase2perc +phase3perc +phase4perc +phase5perc) < 0.2, "phase == 2 & (phase2perc +phase3perc +phase4perc +phase5perc) < 20) - Check population in phase 3 or review classification", "ok"),
     rule11 = if_else((phase == 2 & between((phase2perc +phase3perc +phase4perc +phase5perc),0.2,0.21)),"phase == 2 & (phase3perc +phase4perc +phase5perc) = 20 | 21 - close to limits","ok"),
     rule12 = if_else(between(phase1perc +phase2perc +phase3perc +phase4perc +phase5perc,0.999,1.001),"ok","phase1perc +phase2perc +phase3perc +phase4perc +phase5perc != 100% - check total"),
-    rule13 = if_else((phase == 2 & phase3perc > 0.5)| (phase == 2 & phase4perc > 0), "phase == 2 & phase3perc > 0.5)| (phase == 2 & phase4perc > 0) - Check population in phase 3 and above", "ok"),
-    rule14 = if_else((phase == 1 & phase4perc > 0) | (phase == 2 & phase4perc > 0), "(phase == 1 & phase4perc > 0) | (phase == 2 & phase4perc > 0)  - Check population in phase 4 and above for a zone in phase 1 or phase 2", "ok"))
+    rule13 = if_else((phase == 1 & phase4perc > 0) | (phase == 2 & phase4perc > 0), "(phase == 1 & phase4perc > 0) | (phase == 2 & phase4perc > 0)  - Check population in phase 4 and above for a zone in phase 1 or phase 2", "ok"))
   
   #filter out only observations that have an error
   
   dataset_current <- dataset_current %>%
     rowwise() %>% #for each row
-    mutate(count_ok = sum(across(rule1:rule14,count_ok_fun))) %>% 
-    filter(count_ok < 14) %>% 
+    mutate(count_ok = sum(across(rule1:rule13,count_ok_fun))) %>% 
+    filter(count_ok < 13) %>% 
     select(-count_ok)
   
   return(dataset_current)
