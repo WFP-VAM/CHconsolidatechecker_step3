@@ -56,7 +56,7 @@ dataset_clean <- function(dataset, sheet_type){
     rule11 = if_else((phase == 2 & between((phase2perc +phase3perc +phase4perc +phase5perc),0.2,0.21)),"phase == 2 & (phase3perc +phase4perc +phase5perc) = 20 | 21 - close to limits","ok"),
     rule12 = if_else(between(phase1perc +phase2perc +phase3perc +phase4perc +phase5perc,0.999,1.001),"ok","phase1perc +phase2perc +phase3perc +phase4perc +phase5perc != 100% - check total"),
     rule13 = if_else((phase == 2 & phase3perc > 0.5)| (phase == 2 & phase4perc > 0), "phase == 2 & phase3perc > 0.5)| (phase == 2 & phase4perc > 0) - Check population in phase 3 and above", "ok"),
-    rule14 = if_else((phase == 1 & phase3perc > 0) | (phase == 1 & phase4perc > 0), "phase == 1 & phase3perc > 0)| (phase == 1 & phase4perc > 0) - Check population in phase 3 and above", "ok"))
+    rule14 = if_else((phase == 1 & phase4perc > 0) | (phase == 2 & phase4perc > 0), "(phase == 1 & phase4perc > 0) | (phase == 2 & phase4perc > 0)  - Check population in phase 4 and above for a zone in phase 1 or phase 2", "ok"))
   
   #filter out only observations that have an error
   
