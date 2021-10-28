@@ -47,7 +47,7 @@ dataset_clean <- function(dataset, sheet_type){
     rule2 = if_else(phase4perc > 0.05,"phase4perc > 5 - check phase 4","ok"),
     rule3 = if_else(phase3perc > 0.35, "phase3perc > 35 - check phase 3", "ok"),
     rule4 = if_else(phase4perc > phase3perc, "phase4perc > phase3perc - check phase 4", "ok"),
-    rule5 = if_else(phase2perc < (phase3perc +phase5perc +phase5perc),"phase2perc < (phase3perc +phase5perc +phase5perc) - Check population in phase 3 and above", "ok"),
+    rule5 = if_else(phase2perc < (phase3perc +phase4perc +phase5perc),"phase2perc < (phase3perc +phase4perc +phase5perc) - Check population in phase 3 and above", "ok"),
     rule6 = if_else(phase == 4 & (phase4perc +phase5perc) < 0.2, "phase == 4 & (phase4perc +phase5perc) < 20) - Check population in phase 4 or review classification", "ok"),
     rule7 = if_else((phase == 4 & between((phase4perc +phase5perc),0.2,0.21)),"phase == 4 & (phase4perc +phase5perc) = 20 | 21 - close to limits","ok"),
     rule8 = if_else(phase == 3 & (phase3perc +phase4perc +phase5perc) < 0.2, "phase == 3 & (phase3perc +phase4perc +phase5perc) < 20) - Check population in phase 3 or review classification", "ok"),
