@@ -37,7 +37,7 @@ dataset_clean <- function(dataset, sheet_type){
   )
   
   #dont include any totals or info where the geo info is missing
-  dataset_current <- dataset_current %>% filter(!is.na(adm1_name))
+  dataset_current <- dataset_current %>% filter(!is.na(adm0_name) & !is.na(adm1_name))
   
   dataset_current <- dataset_current %>% 
     mutate(across(phase:phase5perc, as.numeric))
